@@ -1128,7 +1128,7 @@ public class HabitDbAdapter {
         if (criteria == CommonUtil.CRITERIA_DAY) {
             query = "SELECT * FROM " + tblPlus1 + " WHERE day >= '" + from + "' AND day <= '" + day + "'";
         } else {
-            query = "SELECT substr(day, 0, 8) day, sum(count) count FROM " + tblPlus1 + " WHERE day >= '" + from + ".??" + "' AND day <= '" + day + ".??" + "'";
+            query = "SELECT substr(day, 0, 8) day, sum(count) count FROM " + tblPlus1 + " WHERE day >= '" + from + ".??" + "' AND day <= '" + day + ".??" + "'" + " GROUP BY day";
         }
         Log.i(getClass().getName(), "PLUS1 query="+query);
 
@@ -1147,7 +1147,6 @@ public class HabitDbAdapter {
             plus1.setDay(dday);
             plus1.setCount(0);
             plus1LinkedList.add(plus1);
-            Log.i(getClass().getName(), "PLUS1 data list: "+i+" day="+plus1LinkedList.get(i).getDay()+" count="+plus1LinkedList.get(i).getCount());
         }
 
         mDb.beginTransaction();
@@ -1166,6 +1165,8 @@ public class HabitDbAdapter {
                         }
                         ((LinkedList<Plus1>) plus1LinkedList).remove(i);
                         plus1LinkedList.add(i, plus1);
+
+                        Log.i(getClass().getName(), "PLUS1 data list: "+i+" day="+plus1LinkedList.get(i).getDay()+" count="+plus1LinkedList.get(i).getCount());
                     }
                 } while (cursor.moveToNext()) ;
             }
