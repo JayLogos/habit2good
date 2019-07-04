@@ -1126,9 +1126,9 @@ public class HabitDbAdapter {
 
         //query = "SELECT day, sum(count) count FROM " + tblPlus1 + " WHERE day >= '" + from + "' AND day <= '" + day +"' GROUP BY day";
         if (criteria == CommonUtil.CRITERIA_DAY) {
-            query = "SELECT * FROM " + tblPlus1 + " WHERE day >= '" + from + "' AND day <= '" + day + "'";
+            query = "SELECT day dday, count FROM " + tblPlus1 + " WHERE day >= '" + from + "' AND day <= '" + day + "'";
         } else {
-            query = "SELECT substr(day, 0, 8) day, sum(count) count FROM " + tblPlus1 + " WHERE day >= '" + from + ".??" + "' AND day <= '" + day + ".??" + "'" + " GROUP BY day";
+            query = "SELECT substr(day, 0, 8) dday, sum(count) count FROM " + tblPlus1 + " WHERE day >= '" + from + ".??" + "' AND day <= '" + day + ".??" + "'" + " GROUP BY dday";
         }
         Log.i(getClass().getName(), "PLUS1 query="+query);
 
@@ -1159,8 +1159,8 @@ public class HabitDbAdapter {
                 do {
                     for (int i=0 ; i<=period ; i++) {
                         plus1 = plus1LinkedList.get(i);
-                        Log.i(getClass().getName(), "PLUS1 cursor.getColumnIndex="+cursor.getString(cursor.getColumnIndex("day")));
-                        if (plus1.getDay().equals(cursor.getString(cursor.getColumnIndex("day")))) {
+                        //Log.i(getClass().getName(), "PLUS1 cursor.getColumnIndex="+cursor.getString(cursor.getColumnIndex("day")));
+                        if (plus1.getDay().equals(cursor.getString(cursor.getColumnIndex("dday")))) {
                             plus1.setCount(cursor.getInt(cursor.getColumnIndex("count")));
                         }
                         ((LinkedList<Plus1>) plus1LinkedList).remove(i);
