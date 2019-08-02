@@ -168,7 +168,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setStyle(new NotificationCompat.BigTextStyle()
                     .bigText(messageBody));
 
-        Objects.requireNonNull(notificationManager).notify(0, builder.build());
+        try {
+            Objects.requireNonNull(notificationManager).notify(0, builder.build());
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
 
        Log.i(TAG, "end of sendNotification");
     }
