@@ -316,7 +316,11 @@ public class UpdateHabitItem extends AppCompatActivity {
     private final AdapterView.OnItemSelectedListener onCycleSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            ((TextView) view).setTextSize(14);
+            try {
+                ((TextView) view).setTextSize(14);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
             cycleName = parent.getItemAtPosition(position).toString();
         }
 
