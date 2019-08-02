@@ -221,7 +221,11 @@ public class DashboardActivity extends BaseActivity implements AsyncTaskComplete
         toolbar = findViewById(R.id.habits_toolbar);
         setSupportActionBar(toolbar);
         actionbar = getSupportActionBar();
-        actionbar.setTitle(R.string.btn_nav_dashboard);
+        try {
+            actionbar.setTitle(R.string.btn_nav_dashboard);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         setHorizontalSlide();
 
