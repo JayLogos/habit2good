@@ -301,7 +301,11 @@ public class PointmallActivity extends BaseActivity
         toolbar = findViewById(R.id.habits_toolbar);
         setSupportActionBar(toolbar);
         actionbar = getSupportActionBar();
-        actionbar.setTitle(R.string.btn_nav_point);
+        try {
+            actionbar.setTitle(R.string.btn_nav_point);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         layer_my_gpoint = (LinearLayout) findViewById(R.id.layer_my_gpoint);
         layer_my_gpoint.setOnClickListener(this);
