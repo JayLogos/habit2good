@@ -475,7 +475,11 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
         tv_attempt.setText(String.valueOf(attempt));
 
         dbAdapter.setPlus1();
-        soundPool.play(soundId, 1, 1, 0, 0, 1);
+        try {
+            soundPool.play(soundId, 1, 1, 0, 0, 1);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         Plus1 plus1 = randomNumbersTab[0][numberOfPoints-1];
         int count = plus1.getCount();
