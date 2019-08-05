@@ -698,6 +698,42 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
                     }
                 });
                 cashPopDialog.show();
+            } else if(  error != null && error.equals(CommonUtil.ERROR_NO_BUDGET)){
+                cashPopDialog = new CashPopDialog(this);
+                cashPopDialog.setCpTitle(getResources().getString(R.string.not_enough_gold_title));
+                cashPopDialog.setCpDesc(getResources().getString(R.string.not_enough_gold));
+                cashPopDialog.setCpCancelButton(getResources().getString(R.string.hold), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        cashPopDialog.dismiss();
+                    }
+                });
+                cashPopDialog.setCpOkButton(getResources().getString(R.string.go_to_gold), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToMission();
+                        cashPopDialog.dismiss();
+                    }
+                });
+                cashPopDialog.show();
+            } else if(  error != null && error.equals(CommonUtil.ERROR_NO_PURCHASE)){
+                cashPopDialog = new CashPopDialog(this);
+                cashPopDialog.setCpTitle(getResources().getString(R.string.no_purchase_title));
+                cashPopDialog.setCpDesc(getResources().getString(R.string.no_purchase_desc));
+                cashPopDialog.setCpCancelButton(getResources().getString(R.string.no_purchase_cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        cashPopDialog.dismiss();
+                    }
+                });
+                cashPopDialog.setCpOkButton(getResources().getString(R.string.no_purchase_question), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        CommonUtil.showSupport(StoreActivity.this, true);
+                        cashPopDialog.dismiss();
+                    }
+                });
+                cashPopDialog.show();
             }
         } catch (Exception e) {
             e.printStackTrace();
