@@ -552,6 +552,11 @@
     <string name="not_enough_trophy">상품 구매에 필요한 트로피 부족합니다. 지금 더 적립할까요?</string>
     <string name="not_enough_trophy_event">응모에 필요한 트로피가 부족합니다. 지금 더 적립할까요?</string>
     <string name="event_go">%1$s 참여 가능합니다.</string>
+
+    <string name="no_purchase_title">상품 구매를 실패했습니다.</string>
+    <string name="no_purchase_desc">없는 상품이거나 판매 중지된 상품일 수 있습니다.\n문의 바랍니다.</string>
+    <string name="no_purchase_question">질의하기</string>
+    <string name="no_purchase_cancel">취소</string>
     <!-- Purchase -->
 
     <!-- Setting -->
