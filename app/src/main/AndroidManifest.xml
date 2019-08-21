@@ -40,6 +40,7 @@
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/app_name"
+            android:configChanges="orientation|keyboard"
             >
 
             <intent-filter>
@@ -431,6 +432,12 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="1f689a7fedeeb97839ab838817f1bba7b9601bc8" />
+
+        <activity
+            android:name="com.mapps.android.view.InterstitialView"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>
