@@ -818,4 +818,6 @@
     <string name="banner_ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
 
     <string name="preview_image_desc">이미지 미리보기</string>
+
+    <string name="ending_dialog_title">해빗투굿을 종료합니다.</string>
 </resources>
