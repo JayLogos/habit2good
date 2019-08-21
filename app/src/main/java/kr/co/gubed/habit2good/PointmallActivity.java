@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -36,6 +37,8 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.mapps.android.view.AdView;
+import com.mz.common.listener.AdListener;
 import com.tnkfactory.ad.BannerAdListener;
 import com.tnkfactory.ad.BannerAdType;
 import com.tnkfactory.ad.BannerAdView;
@@ -84,7 +87,10 @@ public class PointmallActivity extends BaseActivity
     private String TAG = this.getClass().toString();
 
     /*ADMOB private AdView adView;*/
-    private BannerAdView bannerAdView;
+    /*TNK private BannerAdView bannerAdView;*/
+    private AdView m_adView = null;                 // MANPLUS
+    private Handler handler = new Handler();
+    private EndingDialog mEndingDialog;
 
     private LinearLayout layer_my_gpoint;
 
@@ -231,8 +237,11 @@ public class PointmallActivity extends BaseActivity
     public void onDestroy() {
         super.onDestroy();
         Applications.applicationDestroy();
-        if (bannerAdView != null) {
+        /*if (bannerAdView != null) {
             bannerAdView.onDestroy();
+        }*/
+        if (mEndingDialog != null) {
+            mEndingDialog.dismiss();
         }
     }
 
@@ -248,9 +257,14 @@ public class PointmallActivity extends BaseActivity
         try {
             Log.i(TAG, "onResume");
 
+            /*TNK
             if (bannerAdView != null) {
                 bannerAdView.onResume();
-            }
+            }*/
+
+            /* ManPlus */
+            if (m_adView != null)
+                m_adView.StartService();
 
             try {
                 //HideLoadingProgress();
@@ -292,9 +306,18 @@ public class PointmallActivity extends BaseActivity
     public void onPause() {
         super.onPause();
         Log.e(TAG, "onPause");
+        /* TNK
         if (bannerAdView != null) {
             bannerAdView.onPause();
-        }
+        }*/
+        if (m_adView != null)
+            m_adView.StopService();
+    }
+
+    @Override
+    public void onBackPressed() {
+        manPlusEndingView(1413, 31780, 803889, AdView.TYPE_HTML);
+        //super.onBackPressed();
     }
 
     public void init() {
@@ -341,6 +364,7 @@ public class PointmallActivity extends BaseActivity
 
         npMap = new ArrayList<>();
 
+        /*TNK
         bannerAdView = (BannerAdView) findViewById(R.id.banner_ad);
         bannerAdView.setBannerAdListener(new BannerAdListener() {
             public static final int FAIL_NO_AD = -1;  // no ad available
@@ -362,10 +386,12 @@ public class PointmallActivity extends BaseActivity
 
             }
         });
-        bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)
+        bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)*/
         /*adView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);*/
+
+        manPlusBannerAdcreateBannerXMLMode();
     }
 
     @Override
@@ -1786,4 +1812,58 @@ public class PointmallActivity extends BaseActivity
         }
     }
 
+    private void manPlusBannerAdcreateBannerXMLMode() {
+        m_adView = (AdView) findViewById(R.id.ad);
+        /*m_adView.setUserAge("1");
+        m_adView.setUserGender("3");
+        m_adView.setEmail("few.com");
+        m_adView.setAccount("id");*/
+        m_adView.setAdListener(new AdListener() {
+            @Override
+            public void onChargeableBannerType(View view, boolean b) {
+
+            }
+
+            @Override
+            public void onFailedToReceive(View view, int i) {
+
+            }
+
+            @Override
+            public void onInterClose(View view) {
+
+            }
+
+            @Override
+            public void onAdClick(View view) {
+
+            }
+        });
+        m_adView.isAnimateImageBanner(true);
+    }
+
+    private void manPlusEndingView(final int p, final int m, final int s, int media) {
+        mEndingDialog = new EndingDialog(PointmallActivity.this, getResources().getString(R.string.ending_dialog_title), leftClickListener2, rightClickListener2);
+        mEndingDialog.setCode(p, m, s, media);
+        mEndingDialog.show();
+    }
+
+    private View.OnClickListener leftClickListener2 = new View.OnClickListener() {
+        public void onClick(View v) {
+            if (mEndingDialog != null) {
+                mEndingDialog.dismiss();
+                mEndingDialog = null;
+            }
+            finish();
+        }
+
+    };
+    private View.OnClickListener rightClickListener2 = new View.OnClickListener() {
+        public void onClick(View v) {
+            if (mEndingDialog != null) {
+                mEndingDialog.dismiss();
+                mEndingDialog = null;
+            }
+        }
+    };
 }
