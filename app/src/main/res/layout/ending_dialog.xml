@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_4dp"
+            android:layout_marginBottom="@dimen/space_4dp"
+            android:gravity="center"
+            android:text="해빗투굿을 종료합니다."
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+        <!--<com.mapps.android.view.EndingAdView android:id="@+id/ending_ad"
+			    							   xmlns:app ="http://schemas.android.com/apk/res/com.mezzo.man.samplessecurity"
+			    							   android:layout_width="250dp" 
+			    							   android:layout_height="300dp"  
+			    							   android:layout_marginLeft="10dp"
+			    							   android:layout_marginTop="10dp"
+			    							   android:layout_marginRight="10dp"
+			    							   android:layout_marginBottom="10dp"
+			    							   app:pCode ="100"
+		   									   app:mCode ="200"
+		   									   app:sCode ="302"
+			    							   app:media_Type ="0"
+			    							   android:layout_weight="1"/>-->
+
+        <FrameLayout
+            android:id="@+id/ending_ad"
+            android:layout_width="320dp"
+            android:layout_height="480dp" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bt_left"
+                android:layout_width="100dp"
+                android:layout_height="@dimen/height_40dp"
+                android:background="@color/background"
+                android:text="확인" />
+
+            <Button
+                android:id="@+id/bt_right"
+                android:layout_width="100dp"
+                android:layout_height="@dimen/height_40dp"
+                android:background="@color/background"
+                android:text="취소" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
