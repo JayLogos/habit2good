@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
@@ -44,6 +45,10 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.mapps.android.share.AdInfoKey;
+import com.mapps.android.view.AdInterstitialView;
+import com.mapps.android.view.AdView;
+import com.mz.common.listener.AdListener;
 import com.tnkfactory.ad.BannerAdListener;
 import com.tnkfactory.ad.BannerAdType;
 import com.tnkfactory.ad.BannerAdView;
@@ -98,8 +103,9 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
     private ScaleAnimation scaleAnimationanim;
     private TextView tv_selected_day, tv_count;
     private Switch adSwitch;
-    /* ADMOB private AdView adView;*/
-    private BannerAdView bannerAdView;
+    /* ADMOB private AdView adView;*/               // Google admob
+    private BannerAdView bannerAdView;              // TNK
+    private AdView m_adView = null;                 // MANPLUS
     private RadioGroup radioGroup;
 
     private LineChartView chart;
@@ -152,6 +158,10 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
     private int graphPeriod = CommonUtil.CRITERIA_DAY;
     private SoundPool soundPool;
     private int soundId;
+
+    private AdInterstitialView m_interView = null;
+    private Handler handler = new Handler();
+    private EndingDialog mEndingDialog;
 
     @Override
     int getContentViewId() {
@@ -284,9 +294,12 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
             }
         }
 
-        if (bannerAdView != null) {
+        /* TNK if (bannerAdView != null) {
             bannerAdView.onResume();
-        }
+        }*/
+
+        if (m_adView != null)
+            m_adView.StartService();
     }
 
     @Override
@@ -295,9 +308,11 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
         if (timer != null)
             timer.cancel();
 
-        if (bannerAdView != null) {
+        /* TNK if (bannerAdView != null) {
             bannerAdView.onPause();
-        }
+        }*/
+        if (m_adView != null)
+            m_adView.StopService();
     }
 
     @Override
@@ -332,7 +347,17 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if (mEndingDialog != null) {
+            mEndingDialog.dismiss();
+        }
         //timer.cancel();
+    }
+
+    @Override
+    public void onBackPressed() {
+        manPlusEndingView(1413, 31780, 803889, AdView.TYPE_HTML);
+        //super.onBackPressed();
     }
 
     void init() {
@@ -399,7 +424,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
                 Applications.preference.put(Preference.PLUS1_AD_FLAG, isChecked);
             }
         });
-
+/* TNK
         bannerAdView = (BannerAdView) findViewById(R.id.banner_ad);
         bannerAdView.setBannerAdListener(new BannerAdListener() {
             @Override
@@ -417,7 +442,9 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
 
             }
         });
-        bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)
+        bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)*/
+
+        manPlusBannerAdcreateBannerXMLMode();
 
         radioGroup = findViewById(R.id.graph_period);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -492,27 +519,31 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
         chart.startDataAnimation();
 
         //requestNewInterstitial();
-        TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
-            @Override
-            public void onClose(int i) {
+        if (true) {
 
-            }
+        } else {
+            TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                @Override
+                public void onClose(int i) {
 
-            @Override
-            public void onShow() {
-                requestPutPlus1GP();
-            }
+                }
 
-            @Override
-            public void onFailure(int i) {
-                Log.e(getClass().getName(), "TNK interstitial Ad fail: "+i);
-            }
+                @Override
+                public void onShow() {
+                    requestPutPlus1GP();
+                }
 
-            @Override
-            public void onLoad() {
+                @Override
+                public void onFailure(int i) {
+                    Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                }
 
-            }
-        });
+                @Override
+                public void onLoad() {
+
+                }
+            });
+        }
         showImageDialog();
     }
 
@@ -738,7 +769,11 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
                     } else {
                         aBack();
                     }*/
-                    TnkSession.showInterstitialAd(MainActivity.this);
+                    if (true) {
+                        manPlusInterstitialView(1413, 31780, 803854);
+                    } else {
+                        TnkSession.showInterstitialAd(MainActivity.this);
+                    }
 
                     //requestPutPlus1GP();      // 전면 광고가 정상적으로 출력되었을 루틴에서 처리했으나 여러번 호출됨.
 
@@ -1028,4 +1063,159 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
             Objects.requireNonNull(notificationManager).createNotificationChannel(mChannelPurchase);
         }
     }
+
+    private void manPlusInterstitialView(int p, int m, int s) {
+        if (m_interView == null) {
+            m_interView = new AdInterstitialView(MainActivity.this);
+            m_interView.setAdListener(new AdListener() {
+
+
+                @Override
+                public void onChargeableBannerType(View view, boolean b) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Log.i(getClass().getName(), (b) ? "no chargebale" : "chargeble");
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailedToReceive(View view, int i) {
+                    final int errcode = i;
+                    handler.post(new Runnable() {
+                        public void run() {
+                            showErrorMsg(errcode);
+                        }
+
+                    });
+                }
+
+                @Override
+                public void onInterClose(View view) {
+
+                }
+
+                @Override
+                public void onAdClick(View view) {
+
+                }
+            });
+            m_interView.setViewStyle(AdInterstitialView.VIEWSTYLE.NONE);
+			/*m_interView.setUserAge("22");
+			m_interView.setUserGender("1");
+			m_interView.setLoaction(true);
+			m_interView.setAccount("test");
+			m_interView.setEmail("test@mezzomediaco.kr");*/
+        }
+        m_interView.setAdViewCode(String.valueOf(p), String.valueOf(m), String.valueOf(s));
+        m_interView.ShowInterstitialView();
+    }
+
+    private void showErrorMsg(int errorCode) {
+        String log;
+        switch (errorCode) {
+            case AdInfoKey.AD_SUCCESS:
+                log = "[ " + errorCode + " ] " + "광고 성공";
+                requestPutPlus1GP();
+                break;
+            case AdInfoKey.AD_ID_NO_AD:
+                log = "[ " + errorCode + " ] " + "광고 소진";
+                break;
+            case AdInfoKey.NETWORK_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)네트워크";
+                break;
+            case AdInfoKey.AD_SERVER_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)서버";
+                break;
+            case AdInfoKey.AD_API_TYPE_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)API 형식 오류";
+                break;
+            case AdInfoKey.AD_APP_ID_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                break;
+            case AdInfoKey.AD_WINDOW_ID_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                break;
+            case AdInfoKey.AD_ID_BAD:
+                log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                break;
+            case AdInfoKey.AD_CREATIVE_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)광고 생성 불가";
+                break;
+            case AdInfoKey.AD_ETC_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)예외 오류";
+                break;
+            case AdInfoKey.CREATIVE_FILE_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)파일 형식";
+                break;
+            case AdInfoKey.AD_INTERVAL:
+                log = "[ " + errorCode + " ] " + "광고 요청 어뷰징";
+                break;
+            case AdInfoKey.AD_TIMEOUT:
+                log = "[ " + errorCode + " ] " + "광고 API TIME OUT";
+                break;
+            case AdInfoKey.AD_ADCLICK:
+                log = "[ " + errorCode + " ] " + "광고 클릭";
+                break;
+            default:
+                log = "[ " + errorCode + " ] " + "etc";
+                break;
+        }
+        Log.e(getClass().getName(), log);
+    }
+
+    private void manPlusBannerAdcreateBannerXMLMode() {
+        m_adView = (AdView) findViewById(R.id.ad);
+        /*m_adView.setUserAge("1");
+        m_adView.setUserGender("3");
+        m_adView.setEmail("few.com");
+        m_adView.setAccount("id");*/
+        m_adView.setAdListener(new AdListener() {
+            @Override
+            public void onChargeableBannerType(View view, boolean b) {
+
+            }
+
+            @Override
+            public void onFailedToReceive(View view, int i) {
+
+            }
+
+            @Override
+            public void onInterClose(View view) {
+
+            }
+
+            @Override
+            public void onAdClick(View view) {
+
+            }
+        });
+        m_adView.isAnimateImageBanner(true);
+    }
+
+    private void manPlusEndingView(final int p, final int m, final int s, int media) {
+        mEndingDialog = new EndingDialog(MainActivity.this, getResources().getString(R.string.ending_dialog_title), leftClickListener2, rightClickListener2);
+        mEndingDialog.setCode(p, m, s, media);
+        mEndingDialog.show();
+    }
+
+    private View.OnClickListener leftClickListener2 = new View.OnClickListener() {
+        public void onClick(View v) {
+            if (mEndingDialog != null) {
+                mEndingDialog.dismiss();
+                mEndingDialog = null;
+            }
+            finish();
+        }
+
+    };
+    private View.OnClickListener rightClickListener2 = new View.OnClickListener() {
+        public void onClick(View v) {
+            if (mEndingDialog != null) {
+                mEndingDialog.dismiss();
+                mEndingDialog = null;
+            }
+        }
+    };
 }
