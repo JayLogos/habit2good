@@ -132,6 +132,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <!--TNK
                 <RelativeLayout
                     android:id="@+id/rl_adviewwallet"
                     android:layout_width="match_parent"
@@ -144,9 +145,10 @@
                         android:layout_height="@dimen/height_50dp"
                         android:layout_alignParentBottom="false"
                         android:minHeight="@dimen/height_50dp" />
-                </RelativeLayout>
+                </RelativeLayout>-->
 
-                <!--<RelativeLayout
+                <!--ADMOB
+                <RelativeLayout
                     android:id="@+id/adview_layer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -164,6 +166,35 @@
                     &lt;!&ndash; android:layout_alignParentBottom="true" &ndash;&gt;
 
                 </RelativeLayout>-->
+
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/background_light"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:id="@+id/layout_gallery"
+                        android:layout_width="fill_parent"
+                        android:layout_height="50dp"
+                        android:orientation="vertical" />
+
+                    <com.mapps.android.view.AdView
+                        android:id="@+id/ad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:backgroundStretch="0"
+                        app:mediaCode="31780"
+                        app:mediaType="0"
+                        app:publisherCode="1413"
+                        app:sectionCode="803853" />
+
+
+                    <SurfaceView
+                        android:layout_width="0px"
+                        android:layout_height="0px" />
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
