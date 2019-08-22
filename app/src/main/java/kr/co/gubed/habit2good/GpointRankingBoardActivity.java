@@ -516,7 +516,29 @@ public class GpointRankingBoardActivity extends AppCompatActivity implements Asy
                 break;
             case AdInfoKey.AD_ID_NO_AD:
                 log = "[ " + errorCode + " ] " + "광고 소진";
-                TnkSession.showInterstitialAd(GpointRankingBoardActivity.this);
+                //TnkSession.showInterstitialAd(GpointRankingBoardActivity.this);
+                TnkSession.showInterstitialAd(this, 1000, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial showing fail: "+i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
                 break;
             case AdInfoKey.NETWORK_ERROR:
                 log = "[ " + errorCode + " ] " + "(ERROR)네트워크";
