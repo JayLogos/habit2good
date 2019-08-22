@@ -402,8 +402,10 @@ public class DashboardActivity extends BaseActivity implements AsyncTaskComplete
 
     @Override
     public void onBackPressed() {
-        manPlusEndingView(1413, 31780, 803889, AdView.TYPE_HTML);
-        //super.onBackPressed();
+        /*Fill Rate이 10%이하로 나와 의미가 없음, 일단 현재 버전에서는 사용하지 않음
+        manPlusEndingView(1413, 31780, 803889, AdView.TYPE_HTML);*/
+
+        super.onBackPressed();
     }
 
     private void init() {
