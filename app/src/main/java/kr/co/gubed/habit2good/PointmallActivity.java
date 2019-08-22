@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.mapps.android.share.AdInfoKey;
 import com.mapps.android.view.AdView;
 import com.mz.common.listener.AdListener;
 import com.tnkfactory.ad.BannerAdListener;
@@ -87,7 +88,9 @@ public class PointmallActivity extends BaseActivity
     private String TAG = this.getClass().toString();
 
     /*ADMOB private AdView adView;*/
-    /*TNK private BannerAdView bannerAdView;*/
+    private BannerAdView bannerAdView;
+    private RelativeLayout tnkBanner;
+    private RelativeLayout manplusBanner;
     private AdView m_adView = null;                 // MANPLUS
     private Handler handler = new Handler();
     private EndingDialog mEndingDialog;
@@ -237,9 +240,9 @@ public class PointmallActivity extends BaseActivity
     public void onDestroy() {
         super.onDestroy();
         Applications.applicationDestroy();
-        /*if (bannerAdView != null) {
+        if (bannerAdView != null) {
             bannerAdView.onDestroy();
-        }*/
+        }
         if (mEndingDialog != null) {
             mEndingDialog.dismiss();
         }
@@ -257,10 +260,9 @@ public class PointmallActivity extends BaseActivity
         try {
             Log.i(TAG, "onResume");
 
-            /*TNK
             if (bannerAdView != null) {
                 bannerAdView.onResume();
-            }*/
+            }
 
             /* ManPlus */
             if (m_adView != null)
@@ -306,10 +308,10 @@ public class PointmallActivity extends BaseActivity
     public void onPause() {
         super.onPause();
         Log.e(TAG, "onPause");
-        /* TNK
+
         if (bannerAdView != null) {
             bannerAdView.onPause();
-        }*/
+        }
         if (m_adView != null)
             m_adView.StopService();
     }
@@ -364,7 +366,8 @@ public class PointmallActivity extends BaseActivity
 
         npMap = new ArrayList<>();
 
-        /*TNK
+        tnkBanner = findViewById(R.id.tnk_banner);
+        manplusBanner = findViewById(R.id.manplus_banner);
         bannerAdView = (BannerAdView) findViewById(R.id.banner_ad);
         bannerAdView.setBannerAdListener(new BannerAdListener() {
             public static final int FAIL_NO_AD = -1;  // no ad available
@@ -386,7 +389,7 @@ public class PointmallActivity extends BaseActivity
 
             }
         });
-        bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)*/
+        //bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)
         /*adView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);*/
@@ -1826,7 +1829,12 @@ public class PointmallActivity extends BaseActivity
 
             @Override
             public void onFailedToReceive(View view, int i) {
-
+                Log.e(getClass().getName(), "AD fail code: "+i);
+                if (i != AdInfoKey.AD_SUCCESS) {
+                    tnkBanner.setVisibility(View.VISIBLE);
+                    manplusBanner.setVisibility(View.GONE);
+                    bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE);
+                }
             }
 
             @Override
