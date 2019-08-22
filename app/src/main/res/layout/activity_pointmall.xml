@@ -132,12 +132,12 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!--TNK
                 <RelativeLayout
-                    android:id="@+id/rl_adviewwallet"
+                    android:id="@+id/tnk_banner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/background">
+                    android:background="@color/background"
+                    android:visibility="gone">
 
                     <com.tnkfactory.ad.BannerAdView
                         android:id="@+id/banner_ad"
@@ -145,7 +145,7 @@
                         android:layout_height="@dimen/height_50dp"
                         android:layout_alignParentBottom="false"
                         android:minHeight="@dimen/height_50dp" />
-                </RelativeLayout>-->
+                </RelativeLayout>
 
                 <!--ADMOB
                 <RelativeLayout
@@ -168,6 +168,7 @@
                 </RelativeLayout>-->
 
                 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/manplus_banner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/background_light"
