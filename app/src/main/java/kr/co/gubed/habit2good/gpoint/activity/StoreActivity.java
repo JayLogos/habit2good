@@ -20,12 +20,17 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.mapps.android.share.AdInfoKey;
+import com.mapps.android.view.AdInterstitialView;
+import com.mapps.android.view.AdView;
+import com.mz.common.listener.AdListener;
 import com.tnkfactory.ad.BannerAdListener;
 import com.tnkfactory.ad.BannerAdType;
 import com.tnkfactory.ad.BannerAdView;
@@ -65,8 +70,16 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
     private String TAG = this.getClass().toString();
 
     private TextView tv_title;
-    private LinearLayout type_admob;
-    private BannerAdView bannerAdView;
+
+    /* Ad */
+    private LinearLayout type_admob;        // adMob
+    private BannerAdView bannerAdView;      // TNK
+    private RelativeLayout tnkBanner;
+    private RelativeLayout manplusBanner;
+    private AdView m_adView = null;                 // MANPLUS
+    private AdInterstitialView m_interView = null;
+    private Handler handler = new Handler();
+
     private Button btn_back;
     private Button btn_info;
 
@@ -124,7 +137,34 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
         if (bannerAdView != null) {
             bannerAdView.onResume();
         }
-        TnkSession.prepareInterstitialAd(this, TnkSession.CPC);
+
+        if (m_adView != null)
+            m_adView.StartService();
+
+        TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+            @Override
+            public void onClose(int i) {
+                finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+
+            @Override
+            public void onShow() {
+
+            }
+
+            @Override
+            public void onFailure(int i) {
+                Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+
+            @Override
+            public void onLoad() {
+
+            }
+        });
     }
 
     @Override
@@ -133,6 +173,9 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
         if (bannerAdView != null) {
             bannerAdView.onPause();
         }
+
+        if (m_adView != null)
+            m_adView.StopService();
     }
 
     @Override
@@ -144,6 +187,8 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
     }
 
     public void init(){
+        tnkBanner = findViewById(R.id.tnk_banner);
+        manplusBanner = findViewById(R.id.manplus_banner);
         bannerAdView = (BannerAdView) findViewById(R.id.banner_ad);
         bannerAdView.setBannerAdListener(new BannerAdListener() {
 
@@ -162,7 +207,9 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
 
             }
         });
-        bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)
+        //bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)
+        manPlusBannerAdcreateBannerXMLMode();
+
         /*type_admob = (LinearLayout)findViewById(R.id.type_admob);
 
         try {
@@ -230,7 +277,7 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
             ignore.printStackTrace();
         }
 
-        TnkSession.showInterstitialAd(this, 1000, new TnkAdListener() {
+        /*TnkSession.showInterstitialAd(this, 1000, new TnkAdListener() {
             @Override
             public void onClose(int i) {
                 finish();
@@ -253,7 +300,8 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
             public void onLoad() {
 
             }
-        });
+        });*/
+        manPlusInterstitialView(1413, 31780, 803854);
 
         //super.onBackPressed();
 
@@ -1290,4 +1338,140 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
         finish();
     }
 
+    private void manPlusBannerAdcreateBannerXMLMode() {
+        m_adView = (AdView) findViewById(R.id.ad);
+        /*m_adView.setUserAge("1");
+        m_adView.setUserGender("3");
+        m_adView.setEmail("few.com");
+        m_adView.setAccount("id");*/
+        m_adView.setAdListener(new AdListener() {
+            @Override
+            public void onChargeableBannerType(View view, boolean b) {
+
+            }
+
+            @Override
+            public void onFailedToReceive(View view, int i) {
+                Log.e(getClass().getName(), "AD fail code: "+i);
+                if (i != AdInfoKey.AD_SUCCESS) {
+                    tnkBanner.setVisibility(View.VISIBLE);
+                    manplusBanner.setVisibility(View.GONE);
+                    bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE);
+                }
+            }
+
+            @Override
+            public void onInterClose(View view) {
+
+            }
+
+            @Override
+            public void onAdClick(View view) {
+
+            }
+        });
+        m_adView.isAnimateImageBanner(true);
+    }
+
+    private void manPlusInterstitialView(int p, int m, int s) {
+        if (m_interView == null) {
+            m_interView = new AdInterstitialView(StoreActivity.this);
+            m_interView.setAdListener(new AdListener() {
+
+
+                @Override
+                public void onChargeableBannerType(View view, boolean b) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Log.i(getClass().getName(), (b) ? "no chargebale" : "chargeble");
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailedToReceive(View view, int i) {
+                    final int errcode = i;
+                    handler.post(new Runnable() {
+                        public void run() {
+                            showErrorMsg(errcode);
+                        }
+
+                    });
+                }
+
+                @Override
+                public void onInterClose(View view) {
+                    finish();
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                }
+
+                @Override
+                public void onAdClick(View view) {
+                    finish();
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                }
+            });
+            m_interView.setViewStyle(AdInterstitialView.VIEWSTYLE.NONE);
+			/*m_interView.setUserAge("22");
+			m_interView.setUserGender("1");
+			m_interView.setLoaction(true);
+			m_interView.setAccount("test");
+			m_interView.setEmail("test@mezzomediaco.kr");*/
+        }
+        m_interView.setAdViewCode(String.valueOf(p), String.valueOf(m), String.valueOf(s));
+        m_interView.ShowInterstitialView();
+    }
+
+    private void showErrorMsg(int errorCode) {
+        String log;
+        switch (errorCode) {
+            case AdInfoKey.AD_SUCCESS:
+                log = "[ " + errorCode + " ] " + "광고 성공";
+                break;
+            case AdInfoKey.AD_ID_NO_AD:
+                log = "[ " + errorCode + " ] " + "광고 소진";
+                TnkSession.showInterstitialAd(StoreActivity.this);
+                break;
+            case AdInfoKey.NETWORK_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)네트워크";
+                break;
+            case AdInfoKey.AD_SERVER_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)서버";
+                break;
+            case AdInfoKey.AD_API_TYPE_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)API 형식 오류";
+                break;
+            case AdInfoKey.AD_APP_ID_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                break;
+            case AdInfoKey.AD_WINDOW_ID_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                break;
+            case AdInfoKey.AD_ID_BAD:
+                log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                break;
+            case AdInfoKey.AD_CREATIVE_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)광고 생성 불가";
+                break;
+            case AdInfoKey.AD_ETC_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)예외 오류";
+                break;
+            case AdInfoKey.CREATIVE_FILE_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)파일 형식";
+                break;
+            case AdInfoKey.AD_INTERVAL:
+                log = "[ " + errorCode + " ] " + "광고 요청 어뷰징";
+                break;
+            case AdInfoKey.AD_TIMEOUT:
+                log = "[ " + errorCode + " ] " + "광고 API TIME OUT";
+                break;
+            case AdInfoKey.AD_ADCLICK:
+                log = "[ " + errorCode + " ] " + "광고 클릭";
+                break;
+            default:
+                log = "[ " + errorCode + " ] " + "etc";
+                break;
+        }
+        Log.e(getClass().getName(), log);
+    }
 }
