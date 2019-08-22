@@ -65,7 +65,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".PointmallActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|keyboard"
+            >
             <intent-filter>
                 <action android:name="H2G_REWARD"/>
                 <action android:name="H2G_PURCHASE"/>
@@ -74,7 +76,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".DashboardActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|keyboard"
+            >
             <intent-filter>
                 <action android:name="H2G_TROPHY"/>
                 <action android:name="H2G_GOODSAYING"/>
