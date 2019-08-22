@@ -118,7 +118,6 @@ public class HistoryActivity extends Activity implements AsyncTaskCompleteListen
             @Override
             public void onFailure(int i) {
                 Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
-                aBack();
             }
 
             @Override
