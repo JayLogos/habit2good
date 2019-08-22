@@ -105,6 +105,8 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
     private Switch adSwitch;
     /* ADMOB private AdView adView;*/               // Google admob
     private BannerAdView bannerAdView;              // TNK
+    private RelativeLayout tnkBanner;
+    private RelativeLayout manplusBanner;
     private AdView m_adView = null;                 // MANPLUS
     private RadioGroup radioGroup;
 
@@ -294,9 +296,9 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
             }
         }
 
-        /* TNK if (bannerAdView != null) {
+        if (bannerAdView != null) {
             bannerAdView.onResume();
-        }*/
+        }
 
         if (m_adView != null)
             m_adView.StartService();
@@ -308,9 +310,9 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
         if (timer != null)
             timer.cancel();
 
-        /* TNK if (bannerAdView != null) {
+        if (bannerAdView != null) {
             bannerAdView.onPause();
-        }*/
+        }
         if (m_adView != null)
             m_adView.StopService();
     }
@@ -424,7 +426,10 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
                 Applications.preference.put(Preference.PLUS1_AD_FLAG, isChecked);
             }
         });
-/* TNK
+
+
+        tnkBanner = findViewById(R.id.tnk_banner);
+        manplusBanner = findViewById(R.id.manplus_banner);
         bannerAdView = (BannerAdView) findViewById(R.id.banner_ad);
         bannerAdView.setBannerAdListener(new BannerAdListener() {
             @Override
@@ -442,7 +447,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
 
             }
         });
-        bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)*/
+        //bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)
 
         manPlusBannerAdcreateBannerXMLMode();
 
@@ -519,31 +524,28 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
         chart.startDataAnimation();
 
         //requestNewInterstitial();
-        if (true) {
+        TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+            @Override
+            public void onClose(int i) {
 
-        } else {
-            TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
-                @Override
-                public void onClose(int i) {
+            }
 
-                }
+            @Override
+            public void onShow() {
+                requestPutPlus1GP();
+            }
 
-                @Override
-                public void onShow() {
-                    requestPutPlus1GP();
-                }
+            @Override
+            public void onFailure(int i) {
+                Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+            }
 
-                @Override
-                public void onFailure(int i) {
-                    Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
-                }
+            @Override
+            public void onLoad() {
 
-                @Override
-                public void onLoad() {
+            }
+        });
 
-                }
-            });
-        }
         showImageDialog();
     }
 
@@ -769,11 +771,8 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
                     } else {
                         aBack();
                     }*/
-                    if (true) {
-                        manPlusInterstitialView(1413, 31780, 803854);
-                    } else {
-                        TnkSession.showInterstitialAd(MainActivity.this);
-                    }
+
+                    manPlusInterstitialView(1413, 31780, 803854);
 
                     //requestPutPlus1GP();      // 전면 광고가 정상적으로 출력되었을 루틴에서 처리했으나 여러번 호출됨.
 
@@ -1120,6 +1119,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
                 break;
             case AdInfoKey.AD_ID_NO_AD:
                 log = "[ " + errorCode + " ] " + "광고 소진";
+                TnkSession.showInterstitialAd(MainActivity.this);
                 break;
             case AdInfoKey.NETWORK_ERROR:
                 log = "[ " + errorCode + " ] " + "(ERROR)네트워크";
@@ -1178,7 +1178,12 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
 
             @Override
             public void onFailedToReceive(View view, int i) {
-
+                Log.e(getClass().getName(), "AD fail code: "+i);
+                if (i != AdInfoKey.AD_SUCCESS) {
+                    tnkBanner.setVisibility(View.VISIBLE);
+                    manplusBanner.setVisibility(View.GONE);
+                    bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE);
+                }
             }
 
             @Override
