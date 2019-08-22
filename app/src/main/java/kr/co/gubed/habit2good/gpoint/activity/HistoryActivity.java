@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.mapps.android.share.AdInfoKey;
+import com.mapps.android.view.AdInterstitialView;
+import com.mz.common.listener.AdListener;
 import com.tnkfactory.ad.TnkAdListener;
 import com.tnkfactory.ad.TnkSession;
 
@@ -93,10 +97,35 @@ public class HistoryActivity extends Activity implements AsyncTaskCompleteListen
 
     private TextView tv_desc;
 
+    private AdInterstitialView m_interView = null;
+    private Handler handler = new Handler();
+
     @Override
     protected void onResume() {
         super.onResume();
-        TnkSession.prepareInterstitialAd(this, TnkSession.CPC);
+        //TnkSession.prepareInterstitialAd(this, TnkSession.CPC);
+        TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+            @Override
+            public void onClose(int i) {
+                aBack();
+            }
+
+            @Override
+            public void onShow() {
+
+            }
+
+            @Override
+            public void onFailure(int i) {
+                Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                aBack();
+            }
+
+            @Override
+            public void onLoad() {
+
+            }
+        });
     }
 
     @Override
@@ -312,7 +341,7 @@ public class HistoryActivity extends Activity implements AsyncTaskCompleteListen
             if( Applications.mobAdCnt > 10){
                 Applications.mobAdCnt = 0;
             }
-            TnkSession.showInterstitialAd(this, 1000, new TnkAdListener() {
+            /*TnkSession.showInterstitialAd(this, 1000, new TnkAdListener() {
                 @Override
                 public void onClose(int i) {
                     aBack();
@@ -333,7 +362,9 @@ public class HistoryActivity extends Activity implements AsyncTaskCompleteListen
                 public void onLoad() {
 
                 }
-            });
+            });*/
+            manPlusInterstitialView(1413, 31780, 803854);
+
             //showExitInterstitial();
             /*if( Applications.mInterstitialAd.isLoaded() && Applications.mobAdCnt%2==1 ){
                 Applications.mInterstitialAd.show();
@@ -613,4 +644,103 @@ public class HistoryActivity extends Activity implements AsyncTaskCompleteListen
         finish();
     }
 
+    private void manPlusInterstitialView(int p, int m, int s) {
+        if (m_interView == null) {
+            m_interView = new AdInterstitialView(HistoryActivity.this);
+            m_interView.setAdListener(new AdListener() {
+
+
+                @Override
+                public void onChargeableBannerType(View view, boolean b) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Log.i(getClass().getName(), (b) ? "no chargebale" : "chargeble");
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailedToReceive(View view, int i) {
+                    final int errcode = i;
+                    handler.post(new Runnable() {
+                        public void run() {
+                            showErrorMsg(errcode);
+                        }
+
+                    });
+                }
+
+                @Override
+                public void onInterClose(View view) {
+                    finish();
+                }
+
+                @Override
+                public void onAdClick(View view) {
+                    finish();
+                }
+            });
+            m_interView.setViewStyle(AdInterstitialView.VIEWSTYLE.NONE);
+			/*m_interView.setUserAge("22");
+			m_interView.setUserGender("1");
+			m_interView.setLoaction(true);
+			m_interView.setAccount("test");
+			m_interView.setEmail("test@mezzomediaco.kr");*/
+        }
+        m_interView.setAdViewCode(String.valueOf(p), String.valueOf(m), String.valueOf(s));
+        m_interView.ShowInterstitialView();
+    }
+
+    private void showErrorMsg(int errorCode) {
+        String log;
+        switch (errorCode) {
+            case AdInfoKey.AD_SUCCESS:
+                log = "[ " + errorCode + " ] " + "광고 성공";
+                break;
+            case AdInfoKey.AD_ID_NO_AD:
+                log = "[ " + errorCode + " ] " + "광고 소진";
+                TnkSession.showInterstitialAd(HistoryActivity.this);
+                break;
+            case AdInfoKey.NETWORK_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)네트워크";
+                break;
+            case AdInfoKey.AD_SERVER_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)서버";
+                break;
+            case AdInfoKey.AD_API_TYPE_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)API 형식 오류";
+                break;
+            case AdInfoKey.AD_APP_ID_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                break;
+            case AdInfoKey.AD_WINDOW_ID_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                break;
+            case AdInfoKey.AD_ID_BAD:
+                log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                break;
+            case AdInfoKey.AD_CREATIVE_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)광고 생성 불가";
+                break;
+            case AdInfoKey.AD_ETC_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)예외 오류";
+                break;
+            case AdInfoKey.CREATIVE_FILE_ERROR:
+                log = "[ " + errorCode + " ] " + "(ERROR)파일 형식";
+                break;
+            case AdInfoKey.AD_INTERVAL:
+                log = "[ " + errorCode + " ] " + "광고 요청 어뷰징";
+                break;
+            case AdInfoKey.AD_TIMEOUT:
+                log = "[ " + errorCode + " ] " + "광고 API TIME OUT";
+                break;
+            case AdInfoKey.AD_ADCLICK:
+                log = "[ " + errorCode + " ] " + "광고 클릭";
+                break;
+            default:
+                log = "[ " + errorCode + " ] " + "etc";
+                break;
+        }
+        Log.e(getClass().getName(), log);
+    }
 }
