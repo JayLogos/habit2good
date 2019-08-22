@@ -138,7 +138,6 @@ public class GpointRankingBoardActivity extends AppCompatActivity implements Asy
             @Override
             public void onFailure(int i) {
                 Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
-                finish();
             }
 
             @Override
