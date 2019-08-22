@@ -32,6 +32,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.mapps.android.share.AdInfoKey;
 import com.mapps.android.view.AdView;
 import com.mz.common.listener.AdListener;
 import com.tnkfactory.ad.BannerAdListener;
@@ -93,7 +95,9 @@ public class DashboardActivity extends BaseActivity implements AsyncTaskComplete
     private TextView tv_level5count, tv_level5point;
     private TextView tv_level6count, tv_level6point;
     /*ADMOB private AdView adViewWallet;*/
-    /*TNK private BannerAdView bannerAdView;*/
+    private BannerAdView bannerAdView;
+    private RelativeLayout tnkBanner;
+    private RelativeLayout manplusBanner;
     private AdView m_adView = null;                 // MANPLUS
     private Handler handler = new Handler();
     private EndingDialog mEndingDialog;
@@ -261,10 +265,9 @@ public class DashboardActivity extends BaseActivity implements AsyncTaskComplete
             return;
         }
 
-        /*TNK
         if (bannerAdView != null) {
             bannerAdView.onResume();
-        }*/
+        }
         if (m_adView != null)
             m_adView.StartService();
 
@@ -371,10 +374,9 @@ public class DashboardActivity extends BaseActivity implements AsyncTaskComplete
     @Override
     public void onPause() {
         super.onPause();
-        /*TNK
         if (bannerAdView != null) {
             bannerAdView.onPause();
-        }*/
+        }
         if (m_adView != null)
             m_adView.StopService();
     }
@@ -390,10 +392,9 @@ public class DashboardActivity extends BaseActivity implements AsyncTaskComplete
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        /*TNK
         if (bannerAdView != null) {
             bannerAdView.onDestroy();
-        }*/
+        }
         if (mEndingDialog != null) {
             mEndingDialog.dismiss();
         }
@@ -464,7 +465,8 @@ public class DashboardActivity extends BaseActivity implements AsyncTaskComplete
         getUserInfo();
         requestWalletInfo();
 
-        /*TNK
+        tnkBanner = findViewById(R.id.tnk_banner);
+        manplusBanner = findViewById(R.id.manplus_banner);
         bannerAdView = (BannerAdView) findViewById(R.id.banner_ad);
         bannerAdView.setBannerAdListener(new BannerAdListener() {
             @Override
@@ -482,7 +484,8 @@ public class DashboardActivity extends BaseActivity implements AsyncTaskComplete
 
             }
         });
-        bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)*/
+        //bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE); // or bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE)
+
         /*adViewWallet = (AdView) findViewById(R.id.adViewWallet);
         AdRequest adRequest = new AdRequest.Builder().build();
         adViewWallet.loadAd(adRequest);*/
@@ -1055,7 +1058,12 @@ public class DashboardActivity extends BaseActivity implements AsyncTaskComplete
 
             @Override
             public void onFailedToReceive(View view, int i) {
-
+                Log.e(getClass().getName(), "AD fail code: "+i);
+                if (i != AdInfoKey.AD_SUCCESS) {
+                    tnkBanner.setVisibility(View.VISIBLE);
+                    manplusBanner.setVisibility(View.GONE);
+                    bannerAdView.loadAd(TnkSession.CPC, BannerAdType.LANDSCAPE);
+                }
             }
 
             @Override
