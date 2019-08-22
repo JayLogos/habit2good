@@ -213,44 +213,33 @@
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
 
-    <!--<RelativeLayout
-        android:id="@+id/rl_adviewwallet"
+    <RelativeLayout
+        android:id="@+id/tnk_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"
-        android:visibility="visible">
+        android:visibility="gone">
 
-        &lt;!&ndash;<com.tnkfactory.ad.BannerAdView
+        <com.tnkfactory.ad.BannerAdView
             android:id="@+id/banner_ad"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_50dp"
             android:layout_alignParentBottom="false"
-            android:minHeight="@dimen/height_50dp" />&ndash;&gt;
+            android:minHeight="@dimen/height_50dp" />
 
-        &lt;!&ndash;<com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        <!--<com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:layout_centerHorizontal="true"
             ads:adSize="SMART_BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id_test"></com.google.android.gms.ads.AdView>&ndash;&gt;
-        &lt;!&ndash; android:layout_alignParentBottom="true" &ndash;&gt;
+            ads:adUnitId="@string/banner_ad_unit_id_test"></com.google.android.gms.ads.AdView>-->
 
-        <com.mapps.android.view.AdView
-            xmlns:app="http://schemas.android.com/apk/res/com.mezzomedia.mplus"
-            android:id="@+id/ad"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            app:backgroundStretch="0"
-            app:locationType="0"
-            app:mediaCode="31780"
-            app:mediaType="0"
-            app:publisherCode="1413"
-            app:sectionCode="803853" />
-    </RelativeLayout>-->
+    </RelativeLayout>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/manplus_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/background_light"
