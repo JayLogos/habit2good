@@ -163,8 +163,6 @@ public class GiftBoxActivity extends Activity implements View.OnClickListener, G
             @Override
             public void onFailure(int i) {
                 Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
-                finish();
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
 
             @Override
