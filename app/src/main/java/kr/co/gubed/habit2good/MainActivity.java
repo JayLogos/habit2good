@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
 
     private AdInterstitialView m_interView = null;
     private Handler handler = new Handler();
-    private EndingDialog mEndingDialog;
+    private EndingDialog mEndingDialog=null;
 
     @Override
     int getContentViewId() {
