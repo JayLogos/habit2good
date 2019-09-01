@@ -103,28 +103,6 @@ public class HistoryActivity extends Activity implements AsyncTaskCompleteListen
     @Override
     protected void onResume() {
         super.onResume();
-        //TnkSession.prepareInterstitialAd(this, TnkSession.CPC);
-        TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
-            @Override
-            public void onClose(int i) {
-                aBack();
-            }
-
-            @Override
-            public void onShow() {
-
-            }
-
-            @Override
-            public void onFailure(int i) {
-                Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
-            }
-
-            @Override
-            public void onLoad() {
-
-            }
-        });
     }
 
     @Override
@@ -698,8 +676,7 @@ public class HistoryActivity extends Activity implements AsyncTaskCompleteListen
                 break;
             case AdInfoKey.AD_ID_NO_AD:
                 log = "[ " + errorCode + " ] " + "광고 소진";
-                //TnkSession.showInterstitialAd(HistoryActivity.this);
-                TnkSession.showInterstitialAd(this, 1000, new TnkAdListener() {
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
                     @Override
                     public void onClose(int i) {
                         finish();
@@ -707,12 +684,11 @@ public class HistoryActivity extends Activity implements AsyncTaskCompleteListen
 
                     @Override
                     public void onShow() {
-
                     }
 
                     @Override
                     public void onFailure(int i) {
-                        Log.e(getClass().getName(), "TNK interstitial showing fail: "+i);
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
                         finish();
                     }
 
@@ -721,39 +697,332 @@ public class HistoryActivity extends Activity implements AsyncTaskCompleteListen
 
                     }
                 });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.NETWORK_ERROR:
                 log = "[ " + errorCode + " ] " + "(ERROR)네트워크";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.AD_SERVER_ERROR:
                 log = "[ " + errorCode + " ] " + "(ERROR)서버";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.AD_API_TYPE_ERROR:
                 log = "[ " + errorCode + " ] " + "(ERROR)API 형식 오류";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.AD_APP_ID_ERROR:
-                log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                log = "[ " + errorCode + " ] " + "(ERROR)APP_ID 오류";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.AD_WINDOW_ID_ERROR:
-                log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                log = "[ " + errorCode + " ] " + "(ERROR)WINDOW_ID 오류";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.AD_ID_BAD:
                 log = "[ " + errorCode + " ] " + "(ERROR)ID 오류";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.AD_CREATIVE_ERROR:
                 log = "[ " + errorCode + " ] " + "(ERROR)광고 생성 불가";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.AD_ETC_ERROR:
                 log = "[ " + errorCode + " ] " + "(ERROR)예외 오류";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.CREATIVE_FILE_ERROR:
                 log = "[ " + errorCode + " ] " + "(ERROR)파일 형식";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.AD_INTERVAL:
                 log = "[ " + errorCode + " ] " + "광고 요청 어뷰징";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.AD_TIMEOUT:
                 log = "[ " + errorCode + " ] " + "광고 API TIME OUT";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
+                break;
+            case AdInfoKey.NOT_SUPPORT_VERSION:
+                log = "[ " + errorCode + " ] " + "광고 NOT SUPPORT VERSION";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
+                break;
+            case AdInfoKey.NOT_UNZIP_TIMEOUT:
+                log = "[ " + errorCode + " ] " + "광고 NOT UNZIP TIMEOUT";
+                TnkSession.prepareInterstitialAd(this, TnkSession.CPC, new TnkAdListener() {
+                    @Override
+                    public void onClose(int i) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+                        Log.e(getClass().getName(), "TNK interstitial Ad fail: " + i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onLoad() {
+
+                    }
+                });
+                TnkSession.showInterstitialAd(this);
                 break;
             case AdInfoKey.AD_ADCLICK:
                 log = "[ " + errorCode + " ] " + "광고 클릭";
