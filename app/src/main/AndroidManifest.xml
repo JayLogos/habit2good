@@ -188,6 +188,9 @@
                 android:value=".DashboardActivity" />
         </activity>
 
+        <activity android:name=".PermissionDescActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <!-- timecash -->
         <activity android:name=".gpoint.activity.SignActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
