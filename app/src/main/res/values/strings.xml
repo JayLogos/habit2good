@@ -274,7 +274,7 @@
     <string name="title_partner_sub1">가입</string>
     <string name="title_partner_sub1_desc">+100 GP</string>
     <string name="title_partner_sub2">적립</string>
-    <string name="title_partner_sub2_desc">+5<![CDATA[%]]> GP</string>
+    <string name="title_partner_sub2_desc">+10<![CDATA[%]]> GP</string>
     <string name="title_event">이벤트</string>
     <string name="title_event_sub">행운과 함께, 풍성한 혜택</string>
     <string name="title_store">상점</string>
@@ -293,7 +293,7 @@
 
     <string name="partner_cnt">내 파트너 %1$s명</string>
     <string name="partner_gpoint">파트너 적립 누적 지포인트</string>
-    <string name="partner_desc">추천인 가입 시 100 GP가 지급 되고 \n파트너 적립 포인트의 5%(최대 30%)를 계속 지급 받습니다.</string>
+    <string name="partner_desc">추천인 가입 시 100 GP가 지급 되고 \n파트너 적립 포인트의 10%(최대 60%)를 계속 지급 받습니다.</string>
 
     <string name="setting_version">버전 : %1$s</string>
 
@@ -462,7 +462,7 @@
     <string name="allow_app_access">사용정보 접근 허용</string>
     <string name="allow_app_access_desc">해빗투굿 타임 앱 적립을 위해서는 \'사용정보 접근 허용\'에서 다음과 같이 \'사용추적 허용\'으로 설정해 주셔야 합니다.</string>
 
-    <string name="invite_partners_desc"><![CDATA[신규 가입을 통해 <font color="#00c853">트로피 100</font>개를 받으셨습니다.<br>\'친구 초대\'를 하면 친구들이 적립하는 포인트의 1단계 5% 부터 최대 6단계 30%까지 보너스로 계속 받으실 수 있어요~]]></string>    <!-- Home -->
+    <string name="invite_partners_desc"><![CDATA[신규 가입을 통해 <font color="#00c853">트로피 100</font>개를 받으셨습니다.<br>\'친구 초대\'를 하면 친구들이 적립하는 포인트의 1단계 10% 부터 최대 6단계 60%까지 보너스로 계속 받으실 수 있어요~]]></string>    <!-- Home -->
 
     <!-- History -->
     <string name="history_title">내 금고 - 적립/사용 내역</string>
