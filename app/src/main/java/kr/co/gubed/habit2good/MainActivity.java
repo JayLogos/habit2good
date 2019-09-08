@@ -180,7 +180,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
         super.onCreate(savedInstanceState);
 
         if (Applications.preference.getValue(Preference.USER_ID, "").equals("")) {
-            Intent intent = new Intent(getApplicationContext(), SignActivity.class);
+            Intent intent = new Intent(getApplicationContext(), PermissionDescActivity.class);
             startActivity(intent);
 
             /*getNoticePopFileCache();
@@ -206,7 +206,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
 
             } catch (SecurityException e) {
                 e.printStackTrace();
-                Intent intent = new Intent(getApplicationContext(), SignActivity.class);
+                Intent intent = new Intent(getApplicationContext(), PermissionDescActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -239,7 +239,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
             }
         } catch (SecurityException e) {
             e.printStackTrace();
-            Intent intent = new Intent(getApplicationContext(), SignActivity.class);
+            Intent intent = new Intent(getApplicationContext(), PermissionDescActivity.class);
             startActivity(intent);
             finish();
         }
