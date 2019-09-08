@@ -293,6 +293,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
                 iv_plus1.setImageResource(R.drawable.heart);
                 tv_remain.setText(ZERO);
                 remainTime = 0;
+                iv_plus1.startAnimation(scaleAnimationanim);
             }
         }
 
@@ -315,6 +316,8 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
         }
         if (m_adView != null)
             m_adView.StopService();
+
+        iv_plus1.clearAnimation();
     }
 
     @Override
@@ -417,8 +420,10 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
 
         anim = new TranslateAnimation(0, 10, 0 ,10);
         anim.setDuration(100);
-        scaleAnimationanim = new ScaleAnimation(0.1f, 1f, 0.1f, 1f);
+        scaleAnimationanim = new ScaleAnimation(1f, 0.9f, 1f, 0.9f);
         scaleAnimationanim.setDuration(200);
+        scaleAnimationanim.setStartOffset(1170);        // 좋은 맥박수 평균 70 기준
+        scaleAnimationanim.setRepeatCount(10);          // 무한으로 하면 Allocated instance 수가 계속 늘어남, GC로 회수 가능하나 2~3초 내에 1000개 이상 늘어남
 
         adSwitch = findViewById(R.id.adSwitch);
         adSwitch.setChecked(Applications.preference.getValue(Preference.PLUS1_AD_FLAG, true));
@@ -536,6 +541,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
         Log.i(getClass().getName(), "PLUS1 lastTime="+lastTime+" TIMER="+TIMER+", plus1Timer="+Applications.preference.getValue(Preference.PLUS1_TIMER, "60"));
 
         iv_plus1.setImageResource(R.drawable.heart_grey);
+        iv_plus1.clearAnimation();
 
         timer = new Timer(true);
         timerTask = new TimerTask() {
@@ -571,6 +577,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
                                     Log.i(getClass().getName(), "PLUS1 change heart image");
                                     iv_plus1.setImageResource(R.drawable.heart);
                                     tv_remain.setText("0");
+                                    iv_plus1.startAnimation(scaleAnimationanim);
 
                                     timer.cancel();
                                     Log.i(getClass().getName(), "PLUS1 call timer.cancel()");
