@@ -27,7 +27,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -167,7 +166,7 @@ public class PointmallActivity extends BaseActivity
         super.onCreate(savedInstanceState);
 
         if (Applications.preference.getValue(Preference.USER_ID, "").equals("")) {
-            Intent intent = new Intent(getApplicationContext(), SignActivity.class);
+            Intent intent = new Intent(getApplicationContext(), PermissionDescActivity.class);
             startActivity(intent);
 
             /*getNoticePopFileCache();
@@ -184,32 +183,49 @@ public class PointmallActivity extends BaseActivity
             //view = getLayoutInflater().inflate(R.layout.activity_pointmall, null);
         }
         if (Applications.preference.getValue(Preference.PHONE_NM, "").equals("")) {
-            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
-            String phoneNum = telephonyManager.getLine1Number();
+            String phoneNum=null;
+            try {
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
+                phoneNum = telephonyManager.getLine1Number();
+
+            } catch (SecurityException e) {
+                e.printStackTrace();
+                Intent intent = new Intent(getApplicationContext(), PermissionDescActivity.class);
+                startActivity(intent);
+                finish();
+            }
             Applications.preference.put(Preference.PHONE_NM, phoneNum);
         }
-        TelephonyManager tm = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
-        long subscriberId = 0;
-        if (tm.getSubscriberId() != null && Pattern.matches("^[0-9]+$", tm.getSubscriberId())) {
-            subscriberId = Long.parseLong(tm.getSubscriberId()) - 402;
-        }
-        if ((tm.getSimState() == TelephonyManager.SIM_STATE_ABSENT && subscriberId == 0) || subscriberId == 0) {
-            //No USIM or subscriberId is null or subscriberId is not number.
-            if (cashPopDialog == null) {
-                cashPopDialog = new CashPopDialog(this);
+
+        try {
+            TelephonyManager tm = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
+            long subscriberId = 0;
+            if (tm.getSubscriberId() != null && Pattern.matches("^[0-9]+$", tm.getSubscriberId())) {
+                subscriberId = Long.parseLong(tm.getSubscriberId()) - 402;
             }
-            cashPopDialog.setCpTitle(this.getResources().getString(R.string.usim_title));
-            cashPopDialog.setCpDesc(this.getResources().getString(R.string.usim_detail));
-            cashPopDialog.setCpOkButton(this.getResources().getString(R.string.ok), new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
+            if ((tm.getSimState() == TelephonyManager.SIM_STATE_ABSENT && subscriberId == 0) || subscriberId == 0) {
+                //No USIM or subscriberId is null or subscriberId is not number.
+                if (cashPopDialog == null) {
+                    cashPopDialog = new CashPopDialog(this);
                 }
-            });
-            cashPopDialog.setCpCancel(false);
-            cashPopDialog.show();
-        } else {
-            Applications.preference.put(Preference.AD_ID, Long.toString(subscriberId));
+                cashPopDialog.setCpTitle(this.getResources().getString(R.string.usim_title));
+                cashPopDialog.setCpDesc(this.getResources().getString(R.string.usim_detail));
+                cashPopDialog.setCpOkButton(this.getResources().getString(R.string.ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
+                cashPopDialog.setCpCancel(false);
+                cashPopDialog.show();
+            } else {
+                Applications.preference.put(Preference.AD_ID, Long.toString(subscriberId));
+            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            Intent intent = new Intent(getApplicationContext(), PermissionDescActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         getGiftBoxFileCache();
