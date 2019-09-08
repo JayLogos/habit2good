@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_4dp"
             android:gravity="center_horizontal"
-            android:text="습관 자료를 저장하는데 사용합니다." />
+            android:text="습관 정보를 저장하는데 사용합니다." />
 
         <TextView
             android:id="@+id/textView10"
