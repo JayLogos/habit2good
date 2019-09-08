@@ -47,13 +47,13 @@ public class PermissionDescActivity extends AppCompatActivity {
 
                         @Override
                         public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                            Toast.makeText(getApplicationContext(), "접근 권한 요청을 거부하셨습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "필수 권한 요청을 허용해 주세요.", Toast.LENGTH_SHORT).show();
                         }
                     };
 
                     TedPermission.with(PermissionDescActivity.this)
                             .setPermissionListener(permissionListener)
-                            .setDeniedMessage("필수 권한 요청을 거절하시면\n서비스 사용이 불가합니다. \n\n[설정] 눌러서 [권한]을 변경해 주세요.")
+                            .setDeniedMessage("필수 권한 요청을 거부하시면\n서비스 사용이 불가합니다. \n\n[설정] 눌러서 [권한]을 변경해 주세요.")
                             .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                             Manifest.permission.READ_PHONE_STATE,
                                             Manifest.permission.READ_CONTACTS,
