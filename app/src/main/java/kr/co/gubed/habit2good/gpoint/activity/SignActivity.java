@@ -148,7 +148,7 @@ public class SignActivity extends Activity implements View.OnClickListener, Adid
             cashPopDialog.setCpOkButton(this.getResources().getString(R.string.ok), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();
+                    ActivityCompat.finishAffinity(SignActivity.this);
                 }
             });
             cashPopDialog.setCpCancel(false);
@@ -210,7 +210,7 @@ public class SignActivity extends Activity implements View.OnClickListener, Adid
                                     cashPopDialog.setCpOkButton(SignActivity.this.getResources().getString(R.string.ok), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
-                                            finish();
+                                            ActivityCompat.finishAffinity(SignActivity.this);
                                         }
                                     });
                                     cashPopDialog.setCpCancel(false);
@@ -422,7 +422,7 @@ public class SignActivity extends Activity implements View.OnClickListener, Adid
             }
         }catch (Exception ignore){
         }
-        finish();
+        ActivityCompat.finishAffinity(SignActivity.this);
     }
 
     @Override
@@ -830,7 +830,7 @@ public class SignActivity extends Activity implements View.OnClickListener, Adid
             @Override
             public void onClick(View v) {
                 cashPopDialog.dismiss();
-                finish();
+                ActivityCompat.finishAffinity(SignActivity.this);
             }
         });
         cashPopDialog.setCpCancel(false);
