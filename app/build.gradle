@@ -7,8 +7,8 @@ android {
         applicationId "kr.co.gubed.habit2good"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 52
-        versionName "1.1.1"
+        versionCode 61
+        versionName "1.1.8"
     }
     signingConfigs{
         releaseWithSignedKey {
@@ -104,6 +104,9 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.3.2'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.daimajia.slider:library:1.1.5@aar'
+
+    implementation files('libs/mplus_sdk.jar')
+    implementation project(path: ':unity-ads')
 }
 
 configurations {

@@ -131,6 +131,10 @@ public class UpdateHabitItem extends AppCompatActivity {
             Glide.with(this).load(R.drawable.ic_habit2good_512)
                     .apply(new RequestOptions().circleCrop())
                     .into(mGoalImg);
+        } else if (mCurrentPhotoPath == null || mCurrentPhotoPath.equals("example")) {
+            Glide.with(this).load(R.drawable.ic_habit2good_512)
+                    .apply(new RequestOptions().circleCrop())
+                    .into(mGoalImg);
         } else {
             Glide.with(this).load(mCurrentPhotoPath)
                     .apply(new RequestOptions().circleCrop())

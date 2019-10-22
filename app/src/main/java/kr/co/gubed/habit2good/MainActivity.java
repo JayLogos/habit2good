@@ -54,6 +54,8 @@ import com.tnkfactory.ad.BannerAdType;
 import com.tnkfactory.ad.BannerAdView;
 import com.tnkfactory.ad.TnkAdListener;
 import com.tnkfactory.ad.TnkSession;
+import com.unity3d.ads.mediation.IUnityAdsExtendedListener;
+import com.unity3d.ads.UnityAds;
 
 import org.json.JSONObject;
 
@@ -164,6 +166,8 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
     private AdInterstitialView m_interView = null;
     private Handler handler = new Handler();
     private EndingDialog mEndingDialog=null;
+
+    final private UnitiAdsListener unitiAdsListener = new UnitiAdsListener();
 
     @Override
     int getContentViewId() {
@@ -1525,4 +1529,37 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
             }
         }
     };
+
+    private class UnitiAdsListener implements IUnityAdsExtendedListener {
+
+        @Override
+        public void onUnityAdsClick(String s) {
+
+        }
+
+        @Override
+        public void onUnityAdsPlacementStateChanged(String s, UnityAds.PlacementState placementState, UnityAds.PlacementState placementState1) {
+
+        }
+
+        @Override
+        public void onUnityAdsReady(String s) {
+
+        }
+
+        @Override
+        public void onUnityAdsStart(String s) {
+
+        }
+
+        @Override
+        public void onUnityAdsFinish(String s, UnityAds.FinishState finishState) {
+
+        }
+
+        @Override
+        public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
+
+        }
+    }
 }

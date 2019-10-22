@@ -39,6 +39,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Pattern;
 
+import kr.co.gubed.habit2good.Habit;
+import kr.co.gubed.habit2good.HabitDbAdapter;
 import kr.co.gubed.habit2good.MainActivity;
 import kr.co.gubed.habit2good.R;
 import kr.co.gubed.habit2good.gpoint.filecache.FileCache;
@@ -247,6 +249,11 @@ public class SignActivity extends Activity implements View.OnClickListener, Adid
                         }
                     }
                 });
+
+        /*
+        2019.10.18 초기 습관 예제 아이템 제공 추가
+         */
+        createExampleHabit();
     }
 
     public FileCache getFileCache(){
@@ -912,6 +919,27 @@ public class SignActivity extends Activity implements View.OnClickListener, Adid
             }
         }
         return false;
+    }
+
+    private void createExampleHabit() {
+        String hname = getResources().getString(R.string.exam_habit_name);
+        String goalimg = "example";
+        String goal = getResources().getString(R.string.exam_goal);
+        String signal = getResources().getString(R.string.exam_signal);
+        String reward = getResources().getString(R.string.exam_reward);
+        String category = "default";
+        String sdate = "2019.10.18";
+        String edate = "2019.11.17";
+        String cycle = getResources().getString(R.string.exam_cycle);
+        int count = 100;
+        String unit = getResources().getString(R.string.exam_unit);
+
+        HabitDbAdapter dbAdapter = new HabitDbAdapter(this);
+        dbAdapter.open();
+
+        Habit habit = new Habit(0, -1, hname, goalimg, goal, signal, reward, category, sdate, edate, cycle, count, unit);
+
+        dbAdapter.addNewHabit(habit);
     }
 
 }

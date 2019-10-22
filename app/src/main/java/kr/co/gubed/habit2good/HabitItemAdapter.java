@@ -152,6 +152,10 @@ public class HabitItemAdapter extends RecyclerView.Adapter<HabitItemAdapter.View
             Glide.with(context).load(R.drawable.ic_habit2good_512)
                     .apply(new RequestOptions().circleCrop())
                     .into(holder.iv_goalimg);
+        } else if (Objects.equals(holder.goalImgPath, "example")) {
+            Glide.with(context).load(R.drawable.habit_example)
+                    .apply(new RequestOptions().circleCrop())
+                    .into(holder.iv_goalimg);
         } else {
             Glide.with(context).load(holder.goalImgPath)
                     .apply(new RequestOptions().circleCrop())
@@ -764,6 +768,8 @@ public class HabitItemAdapter extends RecyclerView.Adapter<HabitItemAdapter.View
 
         if (imagePath.equals("default")) {
             imageView.setImageResource(R.drawable.ic_habit2good_512);
+        } else if (imagePath.equals("example")) {
+            imageView.setImageResource(R.drawable.habit_example);
         } else {
             imageView.setImageURI(Uri.parse(imagePath));
         }

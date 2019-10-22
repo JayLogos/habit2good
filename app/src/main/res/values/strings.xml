@@ -227,6 +227,14 @@
     <string name="reward">습관을 통해 얻는 보상</string>
     <string name="action_plan">목표를 이루기 위한 실행계획</string>
 
+    <!-- 습관 예제 -->
+    <string name="exam_habit_name">팔굽혀 펴기 하루 100회(예제)</string>
+    <string name="exam_goal">팔굽혀 펴기 하루 100회</string>
+    <string name="exam_signal">기상 후 사워전, 14시, 17시</string>
+    <string name="exam_reward">코아 근육, 성취감</string>
+    <string name="exam_cycle">일</string>
+    <string name="exam_unit">회</string>
+
     <!-- pie_view.xml 관련 -->
     <string name="pie_view_result">21일중 20일 성공</string>
     <string name="pie_view_schedule">2018.08.12~2018.09.06 (총 21회)</string>
