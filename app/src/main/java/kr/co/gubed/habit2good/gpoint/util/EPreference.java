@@ -31,6 +31,7 @@ public class EPreference {
     public static final String N_LINKED_GOLD = "n_linked_gold";
     public static final String N_PURCHASE_GOLD = "n_purchase_gold";
     public static final String N_LASTTIME_PLUS1 = "n_lasttime_plus1";  // 2019.03.19 h2g
+    public static final String N_BOOSTER_TIME_PLUS1 = "n_booster_time_plus1";  // 2019.10.24 h2g
 
     // habit2good 2018.11.08
     public static final String N_TROPHY = "n_trophy";
@@ -232,6 +233,32 @@ public class EPreference {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE);
         try {
             String returnValue = pref.getString(N_LASTTIME_PLUS1, "");
+            if( returnValue == null || returnValue.equals("")){
+                return 0;
+            }
+            String strLastTIme = APICrypto.decrypt(CommonUtil.SHARED_KEY, returnValue);
+            return Long.parseLong(strLastTIme);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public void putBoosterTimeForPlus1(long time){
+        SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_MULTI_PROCESS);
+        SharedPreferences.Editor editor = pref.edit();
+        try {
+            editor.putString(N_BOOSTER_TIME_PLUS1, APICrypto.encrypt(CommonUtil.SHARED_KEY, time+""));
+            editor.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public long getBoosterTimeForPlus1(){
+        SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE);
+        try {
+            String returnValue = pref.getString(N_BOOSTER_TIME_PLUS1, "");
             if( returnValue == null || returnValue.equals("")){
                 return 0;
             }

@@ -12,7 +12,7 @@ android {
     }
     signingConfigs{
         releaseWithSignedKey {
-            storeFile file("C:\\Users\\Administrator\\.android\\habit2good.jks")
+            storeFile file("C:\\Users\\user\\.android\\habit2good.jks")
             storePassword "good!2018"
             keyAlias "keyhabit2good"
             keyPassword "good!2018"

@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -54,8 +55,14 @@ import com.tnkfactory.ad.BannerAdType;
 import com.tnkfactory.ad.BannerAdView;
 import com.tnkfactory.ad.TnkAdListener;
 import com.tnkfactory.ad.TnkSession;
-import com.unity3d.ads.mediation.IUnityAdsExtendedListener;
+import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds;
+import com.unity3d.services.IUnityServicesListener;
+import com.unity3d.services.UnityServices;
+import com.unity3d.services.monetization.UnityMonetization;
+import com.unity3d.services.monetization.placementcontent.ads.IShowAdListener;
+import com.unity3d.services.monetization.placementcontent.ads.ShowAdPlacementContent;
+import com.unity3d.services.monetization.placementcontent.core.PlacementContent;
 
 import org.json.JSONObject;
 
@@ -112,6 +119,8 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
     private AdView m_adView = null;                 // MANPLUS
     private RadioGroup radioGroup;
 
+    private Button btn_plus1_booster;
+
     private LineChartView chart;
     private LineChartData data;
     private int numberOfLines = 1;
@@ -135,7 +144,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
     private long plus1Timer = Integer.parseInt(Applications.preference.getValue(Preference.PLUS1_TIMER, "60"));
     private long TIMER =  (plus1Timer < 60)? (60 * 1000) : (plus1Timer * 1000);  // default 1분
     private long lastTime;
-    private long remainTime;
+    private long remainTime, boosterTime=0;
     private Timer timer;
     private TimerTask timerTask;
 
@@ -166,8 +175,6 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
     private AdInterstitialView m_interView = null;
     private Handler handler = new Handler();
     private EndingDialog mEndingDialog=null;
-
-    final private UnitiAdsListener unitiAdsListener = new UnitiAdsListener();
 
     @Override
     int getContentViewId() {
@@ -271,7 +278,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
         iv_plus1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (adSwitch.isChecked() && ((int)(remainTime/1000) != 0)) {
+                if (adSwitch.isChecked() && ((int)(remainTime/1000) > 0)) {
                     //iv_plus1.startAnimation(anim);
                     Toast.makeText(getApplicationContext(), (int)(remainTime/1000)+" 초 후에 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 } else {
@@ -290,14 +297,22 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
             final String ZERO = "0";
 
             lastTime = Applications.ePreference.getLastTimeForPlus1();
+            boosterTime = Applications.ePreference.getBoosterTimeForPlus1();
             long currentTime = System.currentTimeMillis();
-            if ((currentTime - lastTime) < TIMER) {
+
+            Log.e(getClass().getName(), "booaterTime="+boosterTime+", lastTime="+lastTime);
+
+            if ((currentTime - lastTime) < (TIMER - boosterTime)) {
                 setPlus1Timer();
             } else {    // 하트 이미지, remain time 초기화
                 iv_plus1.setImageResource(R.drawable.heart);
                 tv_remain.setText(ZERO);
                 remainTime = 0;
                 iv_plus1.startAnimation(scaleAnimationanim);
+                boosterTime = 0;
+                Applications.ePreference.putBoosterTimeForPlus1(boosterTime);
+                lastTime = 0;
+                Applications.ePreference.putLastTimeForPlus1(lastTime);
             }
         }
 
@@ -462,6 +477,25 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
 
         manPlusBannerAdcreateBannerXMLMode();
 
+        final UnityAdsListener unityAdsListener = new UnityAdsListener();
+        UnityAds.initialize(MainActivity.this, getResources().getString(R.string.gaminId), unityAdsListener, false);
+        Log.e(getClass().getName(), "UNITY ADS after UnityAds.initialize");
+
+        btn_plus1_booster = findViewById(R.id.btn_booster);
+        btn_plus1_booster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(UnityAds.isReady(getResources().getString(R.string.placementId))) {
+                    UnityAds.show(MainActivity.this, getResources().getString(R.string.placementId));
+                } else {
+                    btn_plus1_booster.setEnabled(false);
+                    btn_plus1_booster.setTextColor(getResources().getColor(R.color.md_grey_500));
+                    Toast.makeText(MainActivity.this, "광고 준비중입니다. 잠시만 기다려 주세요.", Toast.LENGTH_LONG).show();
+                    Log.e(getClass().getName(), "UNITY ADS, UnityAds.isReady() was false");
+                }
+            }
+        });
+
         radioGroup = findViewById(R.id.graph_period);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -553,9 +587,8 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
             public void run() {
                 long currentTime = System.currentTimeMillis();
 
-                Log.i(getClass().getName(), "PLUS1 in timer");
-
-                remainTime = TIMER - (currentTime - lastTime);
+                remainTime = (TIMER - boosterTime) - (currentTime - lastTime);
+                Log.i(getClass().getName(), "PLUS1 in timer, remainTime="+remainTime+" boosterTime="+boosterTime);
 
 
                 /*new Thread(new Runnable() {
@@ -571,7 +604,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
                     }
                 }).start();*/
 
-                if ((currentTime - lastTime) > TIMER) {
+                if ((currentTime - lastTime) > (TIMER - boosterTime)) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -582,6 +615,11 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
                                     iv_plus1.setImageResource(R.drawable.heart);
                                     tv_remain.setText("0");
                                     iv_plus1.startAnimation(scaleAnimationanim);
+                                    remainTime = 0;
+                                    boosterTime = 0;        // plus1 timer booster 초기화
+                                    Applications.ePreference.putBoosterTimeForPlus1(boosterTime);
+                                    lastTime = 0;
+                                    Applications.ePreference.putLastTimeForPlus1(lastTime);
 
                                     timer.cancel();
                                     Log.i(getClass().getName(), "PLUS1 call timer.cancel()");
@@ -870,10 +908,10 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
                         Applications.ePreference.putTotalGpoint(totalGpoint);
                         Applications.ePreference.putBalanceGpoint(balanceGpoint);
                         Applications.ePreference.put(EPreference.N_MY_GPOINT, myGpoint);*/
-                        String plus1Timer = jo.getString((CommonUtil.RESULT_PLUS1_TIMER));
+                        plus1Timer = Long.parseLong(jo.getString((CommonUtil.RESULT_PLUS1_TIMER)));
                         Applications.preference.put(Preference.PLUS1_TIMER, plus1Timer);
 
-                        TIMER =  (Integer.parseInt(plus1Timer) < 60)? (60 * 1000) : (Integer.parseInt(plus1Timer) * 1000);
+                        TIMER =  (plus1Timer < 60)? (60 * 1000) : (plus1Timer * 1000);
 
                         Toast.makeText(getApplicationContext(), R.string.gp_1plus_toast_msg, Toast.LENGTH_LONG).show();
                         break;
@@ -1084,7 +1122,7 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
 
                 @Override
                 public void onInterClose(View view) {
-
+                    Log.e("manplus", "manPlusInterstitialView onInterClose");
                 }
 
                 @Override
@@ -1530,36 +1568,73 @@ public class MainActivity extends BaseActivity implements AsyncTaskCompleteListe
         }
     };
 
-    private class UnitiAdsListener implements IUnityAdsExtendedListener {
+    private void plus1TimerBooster() {
+        /*
+        비율로 부스터 시간을 조정하려는 의도로 했으나
+        복잡도만 증가하고, 사용자에게 혼동을 줄 수 있어 심플하게 부스터를 통해서 초기화하는 방법 선택
+        2019.10.28
 
-        @Override
-        public void onUnityAdsClick(String s) {
+        if (plus1Timer <= 60) {
+            boosterTime += (long)(plus1Timer * 1) * 1000;     // TIMER가 60초일 경우에는 20%(12초) 줄임
+        } else {
+            boosterTime += (long)(plus1Timer * 1) * 1000;
+        }*/
 
+        boosterTime = plus1Timer * 1000;
+
+        if (remainTime <= 0) {
+            boosterTime = 0;
         }
 
-        @Override
-        public void onUnityAdsPlacementStateChanged(String s, UnityAds.PlacementState placementState, UnityAds.PlacementState placementState1) {
+        Applications.ePreference.putBoosterTimeForPlus1(boosterTime);       // activity가 stop후에 초기화 되는 문제 해결
 
-        }
+        /*timer.cancel();
+        setPlus1Timer();*/
 
+        Log.e("PLUS1 TIMER BOOSTER", "plus1 timer booster 동작, boosterTime=" + boosterTime);
+    }
+
+    private class UnityAdsListener implements IUnityAdsListener {
         @Override
         public void onUnityAdsReady(String s) {
+            Log.e("UNITY ADS", "onUnityAdsReady");
+            btn_plus1_booster.setEnabled(true);
+            btn_plus1_booster.setTextColor(getResources().getColor(R.color.colorAccent));
 
+            /*
+            onUnityAdsReady는 초기화 이 후 광고 송출 준비가 되면 호출 됨, 이후
+            onCreate()되서 초기화 이후에도 콜되지 않음.
+            즉, 앲 실행시 동영상 광고 송출 가능 여부를 판단할 수 없음.
+
+            Toast.makeText(MainActivity.this, "플러스원 부스터 준비 완료", Toast.LENGTH_LONG).show();*/
         }
 
         @Override
         public void onUnityAdsStart(String s) {
-
+            Log.e("UNITY ADS", "onUnityAdsStart");
         }
 
         @Override
         public void onUnityAdsFinish(String s, UnityAds.FinishState finishState) {
+            Log.e("UNITY ADS", "onUnityAdsFinish");
+            if (finishState != UnityAds.FinishState.SKIPPED) {
+                plus1TimerBooster();
 
+                long currentTime = System.currentTimeMillis();
+                long remainTime = (TIMER - (currentTime - lastTime)) / 1000;
+                if (remainTime < 0) remainTime = 0;
+                if (remainTime > 0) {
+                    Toast.makeText(MainActivity.this, remainTime+"초 부스터 성공", Toast.LENGTH_LONG).show();
+                }
+
+            } else {
+                Log.e("UNITY ADS", "onUnityAdsFinish: video was SKIPPED.");
+            }
         }
 
         @Override
         public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
-
+            Log.e("UNITY ADS", "onUnityAdsError: "+s);
         }
     }
 }

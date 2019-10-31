@@ -4,7 +4,7 @@
     <!--<color name="colorPrimary">#FFFFFF</color>-->
     <color name="colorPrimaryDark">#b0003a</color>
     <color name="colorAccent">#B0003A</color>
-    <color name="google_red">#ea4335</color>
+    <color name="google_red">#EA4335</color>
     <color name="MaterialLightGreen400">#9CCC65</color>
     <color name="color1stBackground">#EEEEEE</color>
     <color name="colorBackground">#fafafa</color>
@@ -285,7 +285,7 @@ http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
     <color name="md_grey_100">#F5F5F5</color>
     <color name="md_grey_200">#eeeeee</color>
     <color name="md_grey_300">#e0e0e0</color>
-    <color name="md_grey_400">#bdbdbd</color>
+    <color name="md_grey_400">#BDBDBD</color>
     <color name="md_grey_500">#9E9E9E</color>
     <color name="md_grey_600">#757575</color>
     <color name="md_grey_700">#616161</color>
@@ -309,7 +309,7 @@ http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
     <!--replay blue-->
     <color name="reply_blue_600">#4a6572</color>
     <color name="reply_blue_700">#344955</color>
-    <color name="reply_blue_800">#232f34</color>
+    <color name="reply_blue_800">#232F34</color>
     <color name="reply_orange_500">#f9aa33</color>
 
     <!-- timecash -->
@@ -429,7 +429,7 @@ http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
 
     <color name="admob_background">#f4f2f4</color>
 
-    <color name="event_back_s">#ffea00</color>
-    <color name="event_back_f">#a3cdd3</color>
+    <color name="event_back_s">#FFEA00</color>
+    <color name="event_back_f">#A3CDD3</color>
 
 </resources>

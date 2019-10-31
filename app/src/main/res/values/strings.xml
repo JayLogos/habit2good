@@ -828,4 +828,8 @@
     <string name="preview_image_desc">이미지 미리보기</string>
 
     <string name="ending_dialog_title">해빗투굿을 종료합니다.</string>
+
+    <!-- Unity Ads -->
+    <string name="gaminId">3330306</string>
+    <string name="placementId">rewardedVideo</string>
 </resources>

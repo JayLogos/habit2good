@@ -96,6 +96,15 @@
                             android:textSize="@dimen/text_size_12sp" />
                     </LinearLayout>
 
+                    <Button
+                        android:id="@+id/btn_booster"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/md_white_1000"
+                        android:text="플러스원 부스터"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold" />
+
                 </LinearLayout>
 
                 <LinearLayout
