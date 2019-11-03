@@ -132,7 +132,7 @@ public class UpdateHabitItem extends AppCompatActivity {
                     .apply(new RequestOptions().circleCrop())
                     .into(mGoalImg);
         } else if (mCurrentPhotoPath == null || mCurrentPhotoPath.equals("example")) {
-            Glide.with(this).load(R.drawable.ic_habit2good_512)
+            Glide.with(this).load(R.drawable.habit_example)
                     .apply(new RequestOptions().circleCrop())
                     .into(mGoalImg);
         } else {

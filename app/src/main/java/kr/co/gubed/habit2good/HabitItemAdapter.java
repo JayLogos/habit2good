@@ -643,10 +643,11 @@ public class HabitItemAdapter extends RecyclerView.Adapter<HabitItemAdapter.View
         try {
             calDate = getCountOfTries(habitid, sdate, edate);
             successCount = dbAdapter.getSuccessCountFromExecResultForPeriod(habitid, sdate, edate);
+            Log.i(getClass().getName(), "::habit try count="+calDate+" success="+successCount+" cycle="+cycle);
 
             if (cycle.equals("매일")) {
                 successRatio = (successCount / calDate) * 100;
-                //Log.i(getClass().getName(), "day getSuccessRatio="+successRatio+" count="+count+" calDate="+calDate);
+                //Log.i(getClass().getName(), "::habit getSuccessRatio="+successRatio);
             } else if (cycle.equals("매주")) {
                 successRatio = (successCount / (count*(calDate/7))) * 100 ;
                 //Log.i(getClass().getName(), "week getSuccessRatio="+successRatio+" count="+count+" calDate="+calDate);

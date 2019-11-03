@@ -31,9 +31,13 @@ import com.tnkfactory.ad.TnkSession;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -928,9 +932,19 @@ public class SignActivity extends Activity implements View.OnClickListener, Adid
         String signal = getResources().getString(R.string.exam_signal);
         String reward = getResources().getString(R.string.exam_reward);
         String category = "default";
-        String sdate = "2019.10.18";
-        String edate = "2019.11.17";
+
+        long now = System.currentTimeMillis();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+        Date date = new Date(now);
+        String sdate = format.format(date);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, 1);
+        String edate = format.format(calendar.getTime());
+
         String cycle = getResources().getString(R.string.exam_cycle);
+        Log.i("::habit::", "cycle="+cycle);
         int count = 100;
         String unit = getResources().getString(R.string.exam_unit);
 

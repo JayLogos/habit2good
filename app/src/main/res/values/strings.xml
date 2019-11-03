@@ -232,7 +232,7 @@
     <string name="exam_goal">팔굽혀 펴기 하루 100회</string>
     <string name="exam_signal">기상 후 사워전, 14시, 17시</string>
     <string name="exam_reward">코아 근육, 성취감</string>
-    <string name="exam_cycle">일</string>
+    <string name="exam_cycle">매일</string>
     <string name="exam_unit">회</string>
 
     <!-- pie_view.xml 관련 -->
