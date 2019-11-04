@@ -81,8 +81,8 @@
     <string name="nav_header_desc">Navigation header</string>
 
     <!-- Strings related to 해빗투굿 생각 dialog -->
-    <string name="ht_contents">사람은 습관을 만들고\n습관은 사람을 만든다.\n</string>
-    <string name="ht_author">무명</string>
+    <string name="ht_contents">인간을 성공으로 이끄는 가장 강력한 무기는\n풍부한 지식이나 피나는 노력이 아니라\n바로 습관이다.\n왜냐하면 인간은 습관의 노예이기 때문이다.\n아무도 이 강력한 폭군의 명령을\n거스르지 못한다.\n그러므로 다른 무엇보다도\n내가 지켜야 할 첫 번째 법칙은\n좋은 습관을 만들고\n스스로 그 습관의 노예가 되는 것이다.\n\n-오그 만디노</string>
+    <string name="ht_author">오그 만디노</string>
     <string name="ht_description">서로 의견이 충돌할 때 화를 내는 것은 의미가 없다. 의견 충돌은 위협이 아니라 배우는 기회다. \n승자는 무엇인가를 배운 후 생각을 바꾼 사람이다.\n의견 충돌은 아직 개발되지 않은 잠재력의 거대한 원천이 된다.\n\n- 레이 달리오, ‘원칙’에서</string>
 
     <!-- Dialog -->
@@ -784,7 +784,7 @@
         <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
         <title>Notice</title>
         <link rel=\"stylesheet\" href=\"file:///android_asset/style.css?91\" type=\"text/css\" />
-        <script src=\"file:///android_asset/jquery-3.1.1.min.js\" type=\"text/javascript\"></script>
+        <script src=\"file:///android_asset/jquery-3.4.1.min.js\" type=\"text/javascript\"></script>
     </head>
     <body>
     <div id=wrap><ul id=listview>
@@ -806,7 +806,7 @@
         <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
         <title>Notice</title>
         <link rel=\"stylesheet\" href=\"file:///android_asset/notice_pop.css?37\" type=\"text/css\" />
-        <script src=\"file:///android_asset/jquery-3.1.1.min.js\" type=\"text/javascript\"></script>
+        <script src=\"file:///android_asset/jquery-3.4.1.min.js\" type=\"text/javascript\"></script>
     </head>
     <body>
     <div id=wrap>
