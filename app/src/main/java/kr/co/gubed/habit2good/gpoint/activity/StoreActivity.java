@@ -3,6 +3,7 @@ package kr.co.gubed.habit2good.gpoint.activity;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -140,6 +142,8 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
 
         if (m_adView != null)
             m_adView.StartService();
+
+        //시험용 코드 showTestDialog();
     }
 
     @Override
@@ -549,7 +553,7 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
 
                     HideLoadingProgress();
 
-                }else if (action.equals(CommonUtil.ACTION_VERSION)) {
+                } else if (action.equals(CommonUtil.ACTION_VERSION)) {
                     final String v_n = jo.getString("v_n");
                     final String v_p = jo.getString("v_p");
                     final int v_c = Integer.parseInt(jo.getString("v_c"));
@@ -634,6 +638,11 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
                         @Override
                         public void onClick(View view) {
                             cashPopDialog.dismiss();
+
+                            Log.i("RATING", "RATING_VISIBILITY="+Applications.preference.getValue(Preference.RATING_VISIBILITY, "VISIBLE"));
+                            if (Applications.preference.getValue(Preference.RATING_VISIBILITY, "VISIBLE") == "VISIBLE") {
+                                showReviewReqDialog();
+                            }
                         }
                     });
                     cashPopDialog.show();
@@ -1761,5 +1770,65 @@ public class StoreActivity extends Activity implements View.OnClickListener, Asy
                 break;
         }
         Log.e(getClass().getName(), log);
+    }
+
+    private void showReviewReqDialog() {
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle(Applications.preference.getValue(Preference.CPID, "파트너")+getResources().getString(R.string.req_review_title));
+        adb.setMessage(getResources().getString(R.string.req_review_message))
+                .setPositiveButton(getResources().getString(R.string.req_review_ok),        // 평가하기
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            }
+                        })
+                .setNeutralButton(getResources().getString(R.string.req_review_deny),       // 다시 보지 않기
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Applications.preference.put(Preference.RATING_VISIBILITY, "INVISIBLE");
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton(getResources().getString(R.string.req_review_cancel),    // 나가기
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alertDialog = adb.create();
+        alertDialog.show();
+    }
+
+    private void showTestDialog() {
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle("알림!");
+        adb.setMessage("상품 구매가 완료 되었습니다.")
+                .setPositiveButton("확인",        // 평가하기
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+
+                                Log.i("RATING", "RATING_VISIBILITY="+Applications.preference.getValue(Preference.RATING_VISIBILITY, "VISIBLE"));
+                                if (Applications.preference.getValue(Preference.RATING_VISIBILITY, "VISIBLE") == "VISIBLE") {
+                                    showReviewReqDialog();      // 시험용
+                                }
+
+                            }
+                        });
+                /*.setNegativeButton(getResources().getString(R.string.req_review_cancel),    // 나가기
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });*/
+        AlertDialog alertDialog = adb.create();
+        alertDialog.show();
     }
 }

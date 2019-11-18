@@ -64,6 +64,8 @@ public class Preference {
     public final static String PLUS1_TIMER = "plus1_timer";
     public final static String PLUS1_AD_FLAG = "plus1_ad_flag";
 
+    public final static String RATING_VISIBILITY = "rating_visibility";
+
     public Preference(Context context) {
         Preference.context = context;
     }

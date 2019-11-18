@@ -832,4 +832,12 @@
     <!-- Unity Ads -->
     <string name="gaminId">3330306</string>
     <string name="placementId">rewardedVideo</string>
+
+    <!-- 평점 요청 dialog -->
+    <string name="req_review_title">님 감사합니다.</string>
+    <string name="req_review_message">잠시 시간을 내주시겠어요?\n저희에게 큰 힘이 됩니다.</string>
+    <string name="req_review_ok">평가 하기</string>
+    <string name="req_review_deny">다시 보지 않기</string>
+    <string name="req_review_cancel">취소</string>
+
 </resources>

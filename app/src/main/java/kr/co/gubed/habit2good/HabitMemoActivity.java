@@ -89,6 +89,10 @@ public class HabitMemoActivity extends AppCompatActivity {
                 Glide.with(this).load(R.drawable.ic_habit2good_512)
                         .apply(new RequestOptions().circleCrop())
                         .into(mIvGoalImage);
+            } else if (habit.getGoalimg().equals("example")) {
+                Glide.with(this).load(R.drawable.habit_example)
+                        .apply(new RequestOptions().circleCrop())
+                        .into(mIvGoalImage);
             } else {
                 Glide.with(this).load(habit.getGoalimg())
                         .apply(new RequestOptions().circleCrop())
