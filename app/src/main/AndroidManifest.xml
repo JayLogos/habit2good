@@ -126,6 +126,13 @@
                 android:value=".HabitReminderActivity" />
         </activity>
 
+        <activity android:name=".HabitCollectionsActivity"
+            android:parentActivityName=".HabitsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HabitsActivity" />
+        </activity>
+
         <receiver android:name=".AlarmReceiver" />
 
         <receiver

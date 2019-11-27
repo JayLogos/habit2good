@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -52,7 +53,7 @@ import kr.co.gubed.habit2good.gpoint.util.Preference;
 import kr.co.gubed.habit2good.gpoint.view.LoadingDialog;
 
 
-public class HabitsActivity extends BaseActivity {
+public class HabitCollectionsActivity extends AppCompatActivity {
     public static ArrayList<HashMap<String, String>> habitList;
     public static HabitItemAdapter adapter;
     private BackupDbOnGoogleDrive dbBackup = new BackupDbOnGoogleDrive(this);
@@ -92,14 +93,7 @@ public class HabitsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (Applications.preference.getValue(Preference.USER_ID, "").equals("")) {
-            Intent intent = new Intent(getApplicationContext(), SignActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            Log.i(getClass().getName(), "user_id"+Applications.preference.getValue(Preference.USER_ID, ""));
-        }
+        setContentView(R.layout.activity_habit_collections);
 
         init();
     }
@@ -328,9 +322,8 @@ public class HabitsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // TBD: Habit collections Activity 실행
-                Intent intent = new Intent(getApplicationContext(), HabitCollectionsActivity.class);
-                //startActivityForResult(intent, CommonUtil.REQUEST_CODE_HABIT_ADD);
-                startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), AddHabit.class);
+                startActivityForResult(intent, CommonUtil.REQUEST_CODE_HABIT_ADD);
                 overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
             }
         });
@@ -361,16 +354,6 @@ public class HabitsActivity extends BaseActivity {
                         }
                     }
                 });
-    }
-
-    @Override
-    int getContentViewId() {
-        return R.layout.activity_habits;
-    }
-
-    @Override
-    int getNavigationMenuItemId() {
-        return R.id.btn_nav_habits;
     }
 
     private void makeListFromDB() {
